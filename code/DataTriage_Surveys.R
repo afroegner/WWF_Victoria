@@ -3,7 +3,7 @@ setwd("/nfs/waterwomenfisheries-data")
 library(dplyr)
 
 # Fishermen Survey
-survey_fish_raw <- read.csv("Surverys_fishermen_AR.csv", header=TRUE)
+survey_fish_raw <- read.csv("Surverys_fishermen_AR.csv", header=TRUE, stringsAsFactors = FALSE)
 
 # Name columns we want to keep
 WQ_relevant <- c(grep("bloom", names(survey_fish_raw), value=TRUE),
@@ -19,7 +19,7 @@ survey_fish_WQ <- survey_fish_raw %>%
   select(beach.name, WQ_relevant)
 
 # Household Survey
-survey_house_raw <- read.csv("Surveys_household_AR.csv", header=TRUE)
+survey_house_raw <- read.csv("Surveys_household_AR.csv", header=TRUE, stringsAsFactors = FALSE)
 
 WQ_house_relevant <- c("pot", "jerricans", "superdrum", "bucket", "barrel",
                        "tank", "drum", "stored.no", "other.source.water",
