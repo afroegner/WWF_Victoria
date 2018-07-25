@@ -1,9 +1,7 @@
-setwd("/nfs/waterwomenfisheries-data")
-
 library(dplyr)
 
 # Fishermen Survey
-survey_fish_raw <- read.csv("Surveys_fishermen_EightCommunities.csv", 
+survey_fish_raw <- read.csv("/nfs/waterwomenfisheries-data/Surveys_fishermen_EightCommunities.csv", 
                             header=TRUE, stringsAsFactors = FALSE)
 
 # QA/QC data
@@ -33,7 +31,7 @@ survey_fish_WQ <- survey_fish_raw %>%
 str(survey_fish_raw)
 
 # Household Survey
-survey_house_raw <- read.csv("Surveys_household_AR.csv", header=TRUE, stringsAsFactors = FALSE)
+survey_house_raw <- read.csv("/nfs/waterwomenfisheries-data/Surveys_household_AR.csv", header=TRUE, stringsAsFactors = FALSE)
 
 WQ_house_relevant <- c("pot", "jerricans", "superdrum", "bucket", "barrel",
                        "tank", "drum", "stored.no", "other.source.water",
