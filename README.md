@@ -7,7 +7,7 @@ Lake Victoria provides food, drinking water, and livelihood for surrounding comm
 - Prep data for analysis
 - Explore relationships among communities and water quality concerns/observations and actual water quality measurements.
 
-## Collaborators
+# Collaborators
 
 - Jessica Corman
 - Amber Roegner
