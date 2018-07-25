@@ -3,8 +3,19 @@ setwd("/nfs/waterwomenfisheries-data")
 library(dplyr)
 
 # Fishermen Survey
-survey_fish_raw <- read.csv("Surverys_fishermen_AR.csv", header=TRUE, stringsAsFactors = FALSE)
+survey_fish_raw <- read.csv("Surveys_fishermen_EightCommunities.csv", 
+                            header=TRUE, stringsAsFactors = FALSE)
 
+# QA/QC data
+# catch.size.change is not all capitalized
+survey_fish_raw$catch.size.change <- gsub("y", "Y", survey_fish_raw$catch.size.change)
+survey_fish_raw$earliest.algal.bloom <- as.numeric(survey_fish_raw$earliest.algal.bloom)
+survey_fish_raw$future.for.fishery <- gsub("Yes", "Y", survey_fish_raw$future.for.fishery)
+survey_fish_raw$future.for.fishery <- gsub("No", "N", survey_fish_raw$future.for.fishery)
+
+table(survey_fish_raw$future.for.fishery)
+
+str(survey_fish_raw)
 # Name columns we want to keep
 WQ_relevant <- c(grep("bloom", names(survey_fish_raw), value=TRUE),
                  grep("water", names(survey_fish_raw), value=TRUE),
@@ -17,6 +28,9 @@ Fish_relevant <- c(grep("fish", names(survey_fish_raw), value=TRUE),
 
 survey_fish_WQ <- survey_fish_raw %>%
   select(beach.name, WQ_relevant)
+
+# QA/QC data
+str(survey_fish_raw)
 
 # Household Survey
 survey_house_raw <- read.csv("Surveys_household_AR.csv", header=TRUE, stringsAsFactors = FALSE)
