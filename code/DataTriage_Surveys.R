@@ -36,7 +36,13 @@ write.csv(survey_fish_WQ, "data_out/survey_fish_WQ.csv")
 str(survey_fish_raw)
 
 # Household Survey
-survey_house_raw <- read.csv("/nfs/waterwomenfisheries-data/Surveys_household_AR.csv", header=TRUE, stringsAsFactors = FALSE)
+survey_house_raw <- read.csv("/nfs/waterwomenfisheries-data/Surveys_household_eight_communities.csv", header=TRUE, stringsAsFactors = FALSE)
+survey_house_raw$wash.clothes.in.lake <- gsub("y","Y", survey_house_raw$wash.clothes.in.lake)
+survey_house_raw$same.collection.spot <- gsub("y","Y", survey_house_raw$same.collection.spot)
+survey_house_raw$same.collection.spot <- gsub("tapwater","Y", survey_house_raw$same.collection.spot)
+survey_house_raw$same.collection.spot <- gsub("alternate source","Y", survey_house_raw$same.collection.spot)
+
+table(survey_house_raw$same.collection.spot)
 
 WQ_house_relevant <- c("pot", "jerricans", "superdrum", "bucket", "barrel",
                        "tank", "drum", "stored.no", "other.source.water",
@@ -50,3 +56,5 @@ survey_house_WQ <- survey_house_raw %>%
   select(Beach.Name, WQ_house_relevant)
 
 str(survey_house_WQ)
+
+write.csv(survey_fish_WQ, "data_out/survey_house_WQ.csv")
