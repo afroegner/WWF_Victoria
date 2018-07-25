@@ -1,4 +1,4 @@
-library(dplyr)
+library(tidyverse)
 
 # Fishermen Survey
 survey_fish_raw <- read.csv("/nfs/waterwomenfisheries-data/Surveys_fishermen_EightCommunities.csv", 
@@ -25,7 +25,12 @@ Fish_relevant <- c(grep("fish", names(survey_fish_raw), value=TRUE),
                     "cause.size.change")
 
 survey_fish_WQ <- survey_fish_raw %>%
-  select(beach.name, WQ_relevant)
+  select(beach.name, WQ_relevant) %>%
+  filter(beach.name %in% locations)
+
+table(survey_fish_WQ$beach.name)
+
+write.csv(survey_fish_WQ, "data_out/survey_fish_WQ.csv")
 
 # QA/QC data
 str(survey_fish_raw)
