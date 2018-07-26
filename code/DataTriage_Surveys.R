@@ -53,8 +53,9 @@ WQ_house_relevant <- c("pot", "jerricans", "superdrum", "bucket", "barrel",
                        "wash.clothes.in.lake", "same.collection.spot", "comments.site.collection.raw")
 
 survey_house_WQ <- survey_house_raw %>%
-  select(Beach.Name, WQ_house_relevant)
+  select(Beach.Name, WQ_house_relevant) %>%
+  filter(Beach.Name %in% locations)
 
-str(survey_house_WQ)
+head(survey_house_WQ)
 
-write.csv(survey_fish_WQ, "data_out/survey_house_WQ.csv")
+write.csv(survey_house_WQ, "data_out/survey_house_WQ.csv")
