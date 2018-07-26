@@ -1,5 +1,10 @@
-# Generating site descriptors
+# Generating Community Site descriptors for water quality - survey comparison
+# jrc
 
+# Load relevant libraries
+library(tidyverse)
+
+# Household survey distillation ####
 survey_house <- read.csv("data_out/survey_house_WQ.csv")
 str(survey_house)
 
@@ -46,3 +51,43 @@ water_trt <- survey_house %>%
 # Create dataframe with the percent of households using different treatment
 # options.
 water_treat <- full_join(water_trt, water_trt_no)
+
+# Determine percent of households in each community that wash clothes in lake
+# or collect from the same spot
+
+water_lakeuse <- survey_house %>%
+  select(Beach.Name, wash.clothes.in.lake, same.collection.spot) %>%
+  group_by(Beach.Name) %>%
+  summarise(
+    wash.clotes.perc = sum(wash.clothes.in.lake == "Y")/length(wash.clothes.in.lake),
+    same.spot.perc = sum(same.collection.spot == "Y")/length(same.collection.spot)
+  )
+
+# Join datasets
+
+community_house <- full_join(water_lakeuse, water_treat)
+community_house <- full_join(community_house, water_gathering)
+
+str(community_house)
+
+# Fishery survey distillation ####
+
+survey_fish <- read.csv("data_out/survey_fish_WQ.csv")
+
+str(survey_fish)
+
+# Earliest bloom
+
+fish.bloom <- survey_fish %>%
+  select(beach.name, earliest.algal.bloom) %>%
+  group_by(beach.name) %>%
+  summarise(
+    eab.min = min(earliest.algal.bloom, na.rm=TRUE),
+    eab.max = max(earliest.algal.bloom, na.rm=TRUE),
+    eab.mean = mean(earliest.algal.bloom, na.rm=TRUE),
+    eab.med = median(earliest.algal.bloom, na.rm=TRUE)
+  )
+
+# Combining fish and household data ####
+
+Survey_FourCommunities <- full_join(fish.bloom, community_house, by = c("beach.name" = "Beach.Name"))
