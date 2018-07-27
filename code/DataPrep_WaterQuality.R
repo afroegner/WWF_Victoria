@@ -54,3 +54,11 @@ library("PerformanceAnalytics")
 my_data <- cdata[,-c(1:2,8:9)]
 
 chart.Correlation(my_data, histogram=TRUE, pch=19)
+
+# Correlations between NO3 and Chl a, Coliforms, Ecoli
+
+ggplot(cdata, aes(x=NO3, y=EColi)) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10() +
+  stat_smooth(method="lm")

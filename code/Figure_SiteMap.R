@@ -2,7 +2,7 @@
 
 source("code/DataPrep_SiteInfo.R")
 
-library(ggmap)
+library(tidyverse)
 
 # Map of Winam Gulf with all sites
 bbox <- c(left=34,bottom=-0.6,right=34.9,top=0)

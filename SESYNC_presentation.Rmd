@@ -1,0 +1,147 @@
+---
+title: "Water Women and Fisheries, SESYNC"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Water, Women, and Fisheries
+
+Addressing two ecological realities impacting human health at the world’s largest tropical lake, Lake Victoria
+
+- Jessica Corman
+- Amber Roegner
+
+## Lake Victoria
+
+- Largest tropical lake (68,800 km^2^)
+- Eutrophic
+- Largest freshwater fishery (>500,000 tonnes yr^-1^)
+
+## Research Questions
+- Q1: Do perceptions of lake “water quality” correlate with ecological trends (spatial, variability,
+temporal)?
+
+- Q2: Do perceptions of lake “water quality” influence behavior or decision-making process
+about ecosystem services? 
+
+- Q3: Does intervention X change “water quality” locally (overall or variability in water quality)? If so, how?
+
+- Q4: Does intervention X change individual perception of water quality? Does intervention X
+change fisher or household behavior or decision-making process?
+
+## Research Success
+
+### Github site 
+<https://github.com/afroegner/WWF_Victoria>
+
+
+## Study sites in Winam Gulf
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, cache=TRUE}
+source("code/DataPrep_SiteInfo.R")
+
+library(ggmap)
+
+# Map of Winam Gulf with all sites
+bbox <- c(left=34,bottom=-0.6,right=34.9,top=0)
+g <- ggmap(get_stamenmap(bbox, zoom=11, maptype="toner-lite"))
+g +  geom_point(data=Lake_Sites,
+                aes(x=Longitude, y=Latitude, color=Location), size=3, alpha=0.95) +
+  geom_point(data=Communities,
+             aes(x=Longitude, y=Latitude), alpha=0.5, color="black") +
+  geom_hline(yintercept = 0, color = "black") +
+  geom_vline(xintercept = 34.9, color="black") +
+  theme_classic(12) 
+```
+
+
+## Q1. How do perceptions of lake “water quality” correlate with ecological trends?
+
+- Comparison of surveys from communities with corresponding lake water quality information
+
+## Preliminary exploration
+
+```{r echo=FALSE, warning=FALSE, cache=TRUE, message=FALSE}
+source(file = 'code/DataAnalysis_CorrelationWQbySurveys.R')
+```
+
+## Exploration of water quality across sites
+
+```{r echo=TRUE, warning=FALSE, cache=TRUE, message=FALSE}
+library(tidyverse)
+
+lake_WQ <- read.csv("data_out/lake_WQ.csv")
+
+# Compare water quality across sites and variables
+names.WQ <- c("chloroa.µg_L", "TN.µgN_L", "Nitrates.µgN_L", "Ammonium.µgN_L",
+              "TP.µgP_L", "SRP.µgP_L", "coliforms.MPN_100ml", 
+              "ecoli.MPN_100ml", "totalMC.ug_L")
+
+# Visualize data
+# lake_WQ %>%
+#  select(site, names.WQ) %>%
+#  gather(key=variable, value = value, -site) %>%
+#  ggplot(aes(x=site, y=value)) + 
+#    geom_boxplot() + 
+#    facet_wrap(~variable, scales="free")
+```
+
+## Exploration of water quality across sites
+
+```{r echo=FALSE, warning=FALSE, cache=TRUE, message=FALSE}
+library(tidyverse)
+
+lake_WQ <- read.csv("data_out/lake_WQ.csv")
+
+# Compare water quality across sites and variables
+names.WQ <- c("chloroa.µg_L", "TN.µgN_L", "Nitrates.µgN_L", "Ammonium.µgN_L",
+              "TP.µgP_L", "SRP.µgP_L", "coliforms.MPN_100ml", 
+              "ecoli.MPN_100ml", "totalMC.ug_L")
+
+# Visualize data
+lake_WQ %>%
+  select(site, names.WQ) %>%
+  gather(key=variable, value = value, -site) %>%
+  ggplot(aes(x=site, y=value)) + 
+    geom_boxplot() + 
+    facet_wrap(~variable, scales="free") +
+  theme_bw(12)
+```
+
+
+## Q2. How do perceptions of lake “water quality” influence fishermen behavior?
+
+```{r echo=FALSE, warning=FALSE, cache=TRUE, message=FALSE, out.width = '80%'}
+survey_Fisher_All<- read.csv("data_out/survey_FisherWQperception_All.csv")
+p<- ggplot(survey_Fisher_All) + geom_bar(aes(x=beach.name, na.rm = TRUE, fill= choice.fishing.area)) 
+p + labs(x="Fishing village community",y="counts (selection of fishing sites)") + 
+  theme_classic()+ 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
+
+## Lots more to do...
+
+## Deeper exploration of survey information
+
+Creation of a shiny app
+
+## Limitations of our current data
+
+- Additional water quality data options
+
+    + Water quality monitoring from colleagues (KMFRI)
+    + Remote sensing data
+    
+
+- Addition of broader socio-ecological datasets
+
+    + Community population size
+    + Human health metrics
+    + Other datasets?
+
+## Maybe a Pursuit??
+
+

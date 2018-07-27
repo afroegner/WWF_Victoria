@@ -91,3 +91,4 @@ fish.bloom <- survey_fish %>%
 # Combining fish and household data ####
 
 Survey_FourCommunities <- full_join(fish.bloom, community_house, by = c("beach.name" = "Beach.Name"))
+write.csv(Survey_FourCommunities, "data_out/survey_house_FourCommunities.csv")
