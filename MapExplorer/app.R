@@ -31,11 +31,12 @@ server <- function(input, output) {
   
    output$map <- renderLeaflet({
       leaflet(df) %>%
-       addTiles()  %>%
+  #     addTiles()  %>%
+       addProviderTiles(providers$Esri.WorldImagery) %>%
        # can add separate Markers for communities and water samples
        addMarkers(~Longitude,#from df
                   ~Latitude,#from df
-                  popup = ~ paste0("Beach:", Site, "<br>"
+                  popup = ~ paste0("Beach: ", Site, "<br>"
                                    )
                   ) # specify which columns contain the information you want displayed in the popups
        

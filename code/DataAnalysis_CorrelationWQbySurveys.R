@@ -26,7 +26,7 @@ all_avg <- lake_wq_sub %>%
   spread(variable, avg) %>%
   full_join(Survey_FourCommunities, by=c("site"="beach.name")) %>%
   select(-eab.med, -eab.max, -filter, -trt.max, -borehole, -tap,
-         -lake.water, -other, -boiling,
+         -lake.water, -other, -boiling, -DO, -X,
          -eab.min, -trt.avg, -Cond, -pH, -Micro.perc)
 
 library("PerformanceAnalytics")
