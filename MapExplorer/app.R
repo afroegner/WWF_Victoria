@@ -35,8 +35,8 @@ server <- function(input, output) {
        # can add separate Markers for communities and water samples
        addMarkers(~Longitude,#from df
                   ~Latitude,#from df
-                  popup = ~ HTML(paste0("Beach:", Site, "<br>"
-                                   ))
+                  popup = ~ paste("Beach:", Site, "<br>"
+                                   )
                   ) # specify which columns contain the information you want displayed in the popups
        
    })
