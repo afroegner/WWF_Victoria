@@ -1,0 +1,70 @@
+---
+title: "Water Women and Fisheries SESYNC"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Water, Women, and Fisheries
+
+Addressing two ecological realities impacting human health at the world’s largest tropical lake, Lake Victoria
+
+- Jessica Corman
+- Amber Roegner
+
+## Lake Victoria
+
+- Largest tropical lake (68,800 km2)
+- Eutrophic
+- Largest freshwater fishery (>500,000 tonnes yr-1)
+
+## Research Questions
+- Q1: Do perceptions of lake “water quality” correlate with ecological trends (spatial, variability,
+temporal)?
+
+- Q2: Do perceptions of lake “water quality” influence behavior or decision-making process
+about ecosystem services? 
+
+- Q3: Does intervention X change “water quality” locally (overall or variability in water quality)? If so, how?
+
+- Q4: Does intervention X change individual perception of water quality? Does intervention X
+change fisher or household behavior or decision-making process?
+
+## Study sites in Winam Gulf
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, cache=TRUE}
+source("code/DataPrep_SiteInfo.R")
+
+library(ggmap)
+
+# Map of Winam Gulf with all sites
+bbox <- c(left=34,bottom=-0.6,right=34.9,top=0)
+g <- ggmap(get_stamenmap(bbox, zoom=11, maptype="toner-lite"))
+g +  geom_point(data=Lake_Sites,
+                aes(x=Longitude, y=Latitude, color=Location), size=3, alpha=0.95) +
+  geom_point(data=Communities,
+             aes(x=Longitude, y=Latitude), alpha=0.5, color="black") +
+  geom_hline(yintercept = 0, color = "black") +
+  geom_vline(xintercept = 34.9, color="black") +
+  theme_classic(12) 
+```
+
+
+## How do perceptions of lake “water quality” correlate with ecological trends?
+
+- Comparison of surveys from communities with corresponding lake water quality information
+
+## Preliminary exploration
+
+```{r echo=FALSE, warning=FALSE, cache=TRUE, message=FALSE}
+source(file = 'code/DataAnalysis_CorrelationWQbySurveys.R')
+```
+
+## How do perceptions of lake “water quality” influence behavior or decision-making process about ecosystem services?
+
+```{r pressure}
+plot(pressure)
+```
+
