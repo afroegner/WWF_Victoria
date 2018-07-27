@@ -14,11 +14,27 @@ Addressing two ecological realities impacting human health at the world’s larg
 - Jessica Corman
 - Amber Roegner
 
+
+Thanks to our coaches, Elizabeth and Mary!
+
 ## Lake Victoria
 
 - Largest tropical lake (68,800 km^2^)
 - Eutrophic
 - Largest freshwater fishery (>500,000 tonnes yr^-1^)
+
+## Winam Gulf
+
+- Drinking water source for Kenya
+- Population growth rates >3 %
+- 30% of pollution to Lake Victoria 
+- Water quality risks:
+
+      + Nutrients
+      + Cyanotoxins
+      + E. coli, coliforms
+      + Water hyacinth
+
 
 ## Research Questions
 - Q1: Do perceptions of lake “water quality” correlate with ecological trends (spatial, variability,
@@ -32,6 +48,7 @@ about ecosystem services?
 - Q4: Does intervention X change individual perception of water quality? Does intervention X
 change fisher or household behavior or decision-making process?
 
+
 ## Research Success
 
 ### Github site 
@@ -39,7 +56,7 @@ change fisher or household behavior or decision-making process?
 
 
 ## Study sites in Winam Gulf
-
+Combination of ecological and social data
 ```{r echo=FALSE, warning=FALSE, message=FALSE, cache=TRUE}
 source("code/DataPrep_SiteInfo.R")
 
@@ -109,6 +126,46 @@ lake_WQ %>%
     geom_boxplot() + 
     facet_wrap(~variable, scales="free") +
   theme_bw(12)
+```
+
+## Exploration of water quality across Winam Gulf
+
+```{r echo=FALSE, warning=FALSE, cache=TRUE, message=FALSE}
+littoral_raw <- read.csv("/nfs/waterwomenfisheries-data/community_intake_cyanodata.csv")
+lake_raw <- read.csv("/nfs/waterwomenfisheries-data/kisumubay2_cyanos.csv")
+
+littoral_raw$site <- gsub("\\s", "", littoral_raw$site)
+
+littoral_WQ <- littoral_raw %>%
+  filter(site %in% locations)
+params <- "ecol|sec|coli|chlo|nitra|SRP"
+
+litt.col <- grep(params, names(littoral_raw), value=TRUE, 
+             ignore.case = T)
+lake.col <- grep(params, names(lake_raw), value=TRUE,
+             ignore.case = T)
+
+lake_small <- lake_raw %>%
+  select(Date, Location, Depth, lake.col) %>%
+  filter(Depth != "Integrated") %>%
+  select(-Depth)
+names(lake_small)[3:8] <- c("SRP", "NO3", "ChlA", "Colif", 
+                            "EColi", "Secchi")
+lake_small$site <- as.character(lake_small$Location)
+
+lake_all_raw <- littoral_raw %>%
+  select(site, month, litt.col) 
+names(lake_all_raw)[3:7] <- c("ChlA", "NO3", "SRP", "Colif", "EColi")
+
+cdata <- lake_all_raw %>%
+  full_join(lake_small) %>%
+  filter(site != "")
+library("PerformanceAnalytics")
+my_data <- cdata[,-c(1:2,8:9)]
+log_my_data <- log10(my_data+1)
+
+chart.Correlation(log_my_data, histogram=TRUE, pch=19)
+
 ```
 
 
