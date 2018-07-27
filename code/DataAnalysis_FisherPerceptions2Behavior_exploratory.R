@@ -3,12 +3,8 @@
 
 # Load relevant libraries
 library(tidyverse)
-
-# Data distillation of Household Perceptions and Responses ####
-survey_Household_All<- read.csv("data_out/survey_HouseWQperception_All.csv")
-str(survey_Household_All)
-
-Lake_Ecosystem_Services<- select(survey_Household_All, Beach.Name, chlorine, boiling, wash.clothes.in.lake, harvest.plants.lake, same.collection.spot)
+library(dplyr)
+library (ggplot2)
 
 ######## start here######******
 # Data distillation of Fisher Perceptions and Responses ####
@@ -18,9 +14,6 @@ str(survey_Fisher_All)
 Behavior_site_selection<- select(survey_Fisher_All, beach.name, choice.fishing.area,  water.clarity.change, 
 water.smell.change, fish.spp.change, bloom.effect.waterqual, bloom.effect.fish)
 str(Behavior_site_selection)
-
-Behavior_site_selection<- select(survey_Fisher_All, beach.name, choice.fishing.area, water.clarity.change,
-                                 water.smell.change,  fish.spp.change)
 
 # replace all ambiguous responses with NA
 Behavior_site_selection$water.clarity.change[Behavior_site_selection$water.clarity.change=="interested in learning more"]<- ""
@@ -36,32 +29,29 @@ Behavior_site_selection$water.smell.change[Behavior_site_selection$water.smell.c
 # number of households in each community
 survey_count <- as.data.frame(table(Behavior_site_selection$beach.name))
 names(survey_count) <- c("beach.name", "count")
-# site_selection by percentages
 
-Site_selection<-Behavior_site_selection %>%
-  group_by(beach.name, choice.fishing.area) %>%
-  summarise(choice.fishing.area=n()) %>%
-  arrange(desc(choice.fising.area))
-
-Site_selection %>% Behavior_site_selection %>%
+###################  Get number of counts per site selection category by community ####
+Site_selection <- Behavior_site_selection %>%
   group_by(beach.name, choice.fishing.area) %>%
   tally(sort = TRUE)
 
+#### Getting percentages for fishing selection site by community 
+Site_selection<-Behavior_site_selection %>%
+  group_by(beach.name, choice.fishing.area) %>%
+  summarise(n=n()) %>%
+  mutate(freq = n/sum(n))
+########
+# make stacked barplot by community for selection of fisher site
+library(ggplot2)
 
 
-
-
-
+#### logistic regression - preliminary analysis 
 model<-glm(choice.fishing.area~., family=binomial(link='logit'), data=Behavior_site_selection)
 summary(model)
 anovatable<- anova(model, test="Chisq")
 anovatable<-do.call("rbind", anovatable)
 
-p4 <- ggplot() + geom_bar(aes(y = percentage, x = year, fill = product), data = charts.data,
-                          stat="identity")
-
-
-####
+#### Below is just junk work 
 survey_Fisher_All %>%
   group_by( bloom.effect.waterqual, beach.name)%>%
   summarise(n=n()) %>%
@@ -71,15 +61,12 @@ survey_Fisher_Al<- survey_Fisher_All %>%
   group_by(bloom.effect.waterqual, beach.name)%>%
   summarise(n=n())
 
-# add together worksheets _ rbind ()
-
-
+# add together worksheets _ rbind () to create master total for all communities 
 # Perceptions Effects of Blooms 
 # Water treatment
 # Perceptions of cause of Bloom
 # Perceptions of Future for fishery
 # Perceptiosn of Catch changes
-
 # Response of Choice fishing area  choice.fishing.area","no.days.per.month.lake"
 # Characteristics of respondent age.respondent",years fishing 
 
