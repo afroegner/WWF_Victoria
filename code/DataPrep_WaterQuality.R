@@ -24,3 +24,33 @@ littoral_WQ <- littoral_raw %>%
   filter(site %in% locations)
 
 write.csv(littoral_WQ, "data_out/lake_WQ.csv")
+
+params <- "ecol|sec|coli|chlo|nitra|SRP"
+
+litt.col <- grep(params, names(littoral_raw), value=TRUE, 
+             ignore.case = T)
+lake.col <- grep(params, names(lake_raw), value=TRUE,
+             ignore.case = T)
+
+lake_small <- lake_raw %>%
+  select(Date, Location, Depth, lake.col) %>%
+  filter(Depth != "Integrated") %>%
+  select(-Depth)
+names(lake_small)[3:8] <- c("SRP", "NO3", "ChlA", "Colif", 
+                            "EColi", "Secchi")
+lake_small$site <- as.character(lake_small$Location)
+
+lake_all_raw <- littoral_raw %>%
+  select(site, month, litt.col) 
+names(lake_all_raw)[3:7] <- c("ChlA", "NO3", "SRP", "Colif", "EColi")
+
+cdata <- lake_all_raw %>%
+  full_join(lake_small) %>%
+  filter(site != "")
+
+str(cdata)
+
+library("PerformanceAnalytics")
+my_data <- cdata[,-c(1:2,8:9)]
+
+chart.Correlation(my_data, histogram=TRUE, pch=19)

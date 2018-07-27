@@ -27,17 +27,17 @@ ui <- fluidPage(
 
 # Define server logic required to display a Leaflet map
 server <- function(input, output) {
-  df <- read.csv("") #read in csv with lat, long, and info you want displayed for each location
+  df <- read.csv("/nfs/waterwomenfisheries-data/Site_Info.csv") #read in csv with lat, long, and info you want displayed for each location
   
    output$map <- renderLeaflet({
       leaflet(df) %>%
-       addTiles() %>%
+       addTiles()  %>%
        # can add separate Markers for communities and water samples
-       addMarkers(~long,#from df
-                  ~lat,#from df
-                  popup = ~ HTML(paste0("Name:", name, "<br>",
-                                        "Age:", age, "<br>",
-                                        "Other info:", info, "<br>",)))#specify which columns contain the information you want displayed in the popups
+       addMarkers(~Longitude,#from df
+                  ~Latitude,#from df
+                  popup = ~ paste("Beach:", Site, "<br>"
+                                   )
+                  ) # specify which columns contain the information you want displayed in the popups
        
    })
 }
